@@ -17,4 +17,4 @@ jobs:
         run: date
 
       - name: Run ls -l
-        run: ls
+        run: ls -l
