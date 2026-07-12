@@ -36,7 +36,7 @@ module.exports = [
     }
   },
   {
-    files: ['src/**/*.{js,jsx}', 'test/**/*.{js,jsx}'],
+    files: ['src/**/*.{js,jsx}', 'test/**/*.{js,jsx}', 'jest.setup.js'],
     plugins: {
       react,
       jest
