@@ -1,6 +1,7 @@
 const js = require('@eslint/js')
 const react = require('eslint-plugin-react')
 const jest = require('eslint-plugin-jest')
+const playwright = require('eslint-plugin-playwright')
 const globals = require('globals')
 
 module.exports = [
@@ -73,6 +74,31 @@ module.exports = [
       'arrow-spacing': ['error', { 'before': true, 'after': true }],
       'no-console': 'error',
       'react/prop-types': 0
+    }
+  },
+  {
+    files: ['playwright.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node
+      }
+    }
+  },
+  {
+    files: ['e2e/**/*.spec.js'],
+    plugins: {
+      playwright
+    },
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...playwright.configs['flat/recommended'].languageOptions?.globals
+      }
+    },
+    rules: {
+      ...playwright.configs['flat/recommended'].rules,
+      // Prevents the empty beforeEach error you had earlier
+      'no-unused-vars': ['error', { 'varsIgnorePattern': '^beforeEach$' }]
     }
   }
 ]
