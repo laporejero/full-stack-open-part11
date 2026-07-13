@@ -10,6 +10,10 @@ app.get('/version', (req, res) => {
   res.send('version 2')
 })
 
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
+
 const start = async () => {
   await app.listen(PORT)
   console.log(`server started on port ${PORT}`)
