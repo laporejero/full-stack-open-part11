@@ -15,11 +15,13 @@ jobs:
                 node-version: '24'
             - name: Install dependencies
               run: npm install
-            - name: Install Playwright browsers
-              run: npx playwright install --with-deps
             - name: Check style
               run: npm run eslint
             - name: Run npm test
               run: npm run test
+            - name: Run npm run build
+              run: npm run build
+            - name: Install Playwright browsers
+              run: npx playwright install --with-deps
             - name: Run Playwright tests
               run: npm run test:e2e
