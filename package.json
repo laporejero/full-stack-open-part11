@@ -38,7 +38,8 @@
       "<rootDir>/jest.setup.js"
     ],
     "testPathIgnorePatterns": [
-      "e2e-tests"
+      "playwright.config.js",
+      "e2e"
     ]
   },
   "devDependencies": {
