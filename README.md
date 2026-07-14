@@ -1,6 +1,6 @@
 # Full Stack open CI/CD
 
-Deployment link: https://pokemon-list-ntvr.onrender.com/
+Live Demo: https://pokemon-list-ntvr.onrender.com/
 
 This repository is used for the CI/CD module of the Full Stack Open course
 
