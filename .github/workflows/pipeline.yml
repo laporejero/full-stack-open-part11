@@ -54,6 +54,38 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_TITLE: "Deployment Successful!"
             DISCORD_COLOR: ${{ job.status }}
+            DISCORD_DESCRIPTION: |
+              A new version has been deployed to Render.
 
+              Repository: ${{ github.repository }}
+              Branch: ${{ github.ref_name }}
+              Commit: ${{ github.sha }}
+              Author: ${{ github.actor }}
+
+              Workflow Run:
+              ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    
+    notify-failure:
+      if: ${{ failure() }}
+      needs: [simple_deployment_pipeline]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deployment Pipeline Failed
+          uses: sarisia/actions-status-discord@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_TITLE: "Deployment Pipeline Failed"
+            DISCORD_COLOR: ${{ job.status }}
+            DISCORD_DESCRIPTION: |
+              The deployment pipeline failed.
+
+              Repository: ${{ github.repository }}
+              Commit: ${{ github.sha }}
+              Triggered by: ${{ github.actor }}
+
+              Workflow:
+              ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     
