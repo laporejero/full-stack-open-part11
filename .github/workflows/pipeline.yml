@@ -43,3 +43,17 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             DEFAULT_BUMP: patch
+
+    notify-success:
+      if: ${{ success() }}
+      needs: [simple_deployment_pipeline]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deployment Successful
+          uses: sarisia/actions-status-discord@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_COLOR: ${{ job.status }}
+
+    
