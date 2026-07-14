@@ -9,32 +9,37 @@ on:
         types: [opened, synchronize]
 
 jobs:
-    simple_deployment_pipeline:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v6
-            - uses: actions/setup-node@v6
-              with:
-                node-version: '24'
-            - name: Install dependencies
-              run: npm install
-            - name: Check style
-              run: npm run eslint
-            - name: Run npm test
-              run: npm run test
-            - name: Run npm run build
-              run: npm run build
-            - name: Install Playwright browsers
-              run: npx playwright install --with-deps
-            - name: Run Playwright tests
-              run: npm run test:e2e
-            - name: Trigger deployment
-              if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
-              run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+    build_and_test:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v6
+        - uses: actions/setup-node@v6
+          with:
+            node-version: '24'
+        - name: Install dependencies
+          run: npm install
+        - name: Check style
+          run: npm run eslint
+        - name: Run npm test
+          run: npm run test
+        - name: Run npm run build
+          run: npm run build
+        - name: Install Playwright browsers
+          run: npx playwright install --with-deps
+        - name: Run Playwright tests
+          run: npm run test:e2e
+
+    deploy:
+      if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+      needs: [build_and_test]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Trigger deployment
+          run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
     
     tag_release:
       if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
-      needs: [simple_deployment_pipeline]
+      needs: [deploy]
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v6
@@ -46,7 +51,7 @@ jobs:
 
     notify-success:
       if: ${{ success() }}
-      needs: [simple_deployment_pipeline]
+      needs: [build_and_test, deploy]
       runs-on: ubuntu-latest
       steps:
         - name: Deployment Successful
@@ -69,7 +74,7 @@ jobs:
     
     notify-failure:
       if: ${{ failure() }}
-      needs: [simple_deployment_pipeline]
+      needs: [build_and_test, deploy]
       runs-on: ubuntu-latest
       steps:
         - name: Deployment Pipeline Failed
