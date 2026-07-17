@@ -1,8 +1,14 @@
 # Full Stack open CI/CD
 
-Live Demo: https://pokemon-list-ntvr.onrender.com/
-
 This repository is used for the CI/CD module of the Full Stack Open course
+
+## Links
+
+### Deployed Pokedex
+https://pokemon-list-ntvr.onrender.com/
+
+### Notes App Repository (Exercises 21–22)
+https://github.com/laporejero/notes-app
 
 ## Commands
 
